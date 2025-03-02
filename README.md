@@ -1,5 +1,5 @@
 # Phaser 
-This repo contains all code for the paper Set Phasers to Stun: Beaming Power and Control to Mobile Robots with Laser Light (link coming soon!). We also provide a detailed design guide for replicating the Phaser tracking and laser steering design, which enables fusion of 3D object tracking via stereo-vision with any laser steering device. 
+This repo contains all code for the paper Set Phasers to Stun: Beaming Power and Control to Mobile Robots with Laser Light (link coming soon!). We also provide a detailed guide for replicating the Phaser tracking and laser steering design, which enables integration of 3D object tracking via stereo-vision with any laser steering device. 
 
 ## Contents
 1. [Provided Code](#provided-code)
@@ -16,12 +16,18 @@ This repo contains all code for the paper Set Phasers to Stun: Beaming Power and
     5. [Build Your Own Tracking and Steering System with Our Code](#build-your-own-tracking-and-steering-system-with-our-code) 
 
 ## Provided Code
+Resources in this repo are organized into three folders:
+
+1. [track_steer](track_steer) Code, Jupyter notebooks, and example data for calibrating and deploying a stereo-vision-based tracking and laser steering system using Phaser methodologies.
+2. [laser_modulation](laser_modulation): Code and illustrative Jupyter notebook for FSK current-modulation of laser light via Rohde and Schwarz power supply serial interface.
+3. [millimobile](millimobile): Firmware used in the paper evaluation to receive laser data and respond to laser-provided commands onboard MilliMobile robots.
 
 ## Tracking and Steering System Guide
 This section details the calibration and deployment procedure for the Phaser tracking and steering system. It is based upon our particular prototype (see the paper for more details), but the majority of the code and instructions hold for any co-located stereo-pair and steering device. See [Build Your Own Tracking and Steering System with Our Code](#build-your-own-tracking-and-steering-system-with-our-code) for information on how to adapt the resources here to your own tracking and steering system for varied laser-based applications.
 
 
 ### Setup
+Some steps in this section are specific to our prototype, which uses Allied Vision cameras and an Optotune fast-steering mirror.
 
 #### Software
 1. Install the [VimbaX SDK](https://www.alliedvision.com/en/products/software/vimba-x-sdk/#c13326).

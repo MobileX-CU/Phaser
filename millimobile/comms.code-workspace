@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"gpio.h": "c",
+			"time_units.h": "c",
+			"bluetooth.h": "c",
+			"gap.h": "c",
+			"random": "c",
+			"limits": "c",
+			"compare": "c",
+			"cmath": "c",
+			"devicetree.h": "c",
+			"util.h": "c"
+		},
+		"nrf-connect.applications": [
+			"${workspaceFolder}"
+		]
+	}
+}
