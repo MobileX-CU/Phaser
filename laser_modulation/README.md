@@ -1,0 +1,1 @@
+This code is specific to controlling a Rohde and Schwarz power supply over serial interface.
