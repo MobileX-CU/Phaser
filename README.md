@@ -1,24 +1,29 @@
-# Phaser Tracking and Steering
-This guide covers the procedure for calibrating and deploying the Phaser tracking and steering module for real-time operation. See the paper describing Phaser's design and implementation [here](https://github.com/MobileX-CU/PowerDelivery/blob/main/paper/submission.pdf).
+# Phaser 
+This repo contains all code for the paper Set Phasers to Stun: Beaming Power and Control to Mobile Robots with Laser Light (link coming soon!). We also provide a detailed design guide for replicating the Phaser tracking and laser steering design, which enables fusion of 3D object tracking via stereo-vision with any laser steering device. 
 
-1. [Important Notes](#important-notes)
-2. [Setup](#setup)
-    1. [Software](#software)
-    2. [Hardware](#hardware)
-3. [Calibration](#calibration)
-    1. [Stereo-Camera Calibration](#stereo-camera-calibration)
-    2. [Laser Pose Calibration](#laser-pose-calibration)
-    3. [Mapping](#mapping)
-4. [Deployment](#deployment)
-   
+## Contents
+1. [Provided Code](#provided-code)
+2. [Tracking and Steering System Guide](#tracking-and-steering-system-guide)
 
-## Important Notes
-* Never detach the Dusb connector from the OptoTune mirror driver or disconnect the mirror from the driver when it is connected to power. See the [Hardware](#hardware-2) section for details.
-* Do not jostle or move the system between calibration and deployment. Slight shifts of components within the prototype necessitate re-calibration. 
+    2. [Setup](#setup)
+        1. [Software](#software)
+        2. [Hardware](#hardware)
+    3. [Calibration](#calibration)
+        1. [Stereo-Camera Calibration](#stereo-camera-calibration)
+        2. [Laser Pose Calibration](#laser-pose-calibration)
+        3. [Mapping](#mapping)
+    4. [Deployment](#deployment)
+    5. [Build Your Own Tracking and Steering System with Our Code](#build-your-own-tracking-and-steering-system-with-our-code) 
 
-## Setup
+## Provided Code
 
-### Software
+## Tracking and Steering System Guide
+This section details the calibration and deployment procedure for the Phaser tracking and steering system. It is based upon our particular prototype (see the paper for more details), but the majority of the code and instructions hold for any co-located stereo-pair and steering device. See [Build Your Own Tracking and Steering System with Our Code](#build-your-own-tracking-and-steering-system-with-our-code) for information on how to adapt the resources here to your own tracking and steering system for varied laser-based applications.
+
+
+### Setup
+
+#### Software
 1. Install the [VimbaX SDK](https://www.alliedvision.com/en/products/software/vimba-x-sdk/#c13326).
 2. Create a conda environment from [phaser_env.yml](phaser_env.yml). Run all Phaser code in this environment.
 3. All code and examples for the tracking and steering module can be found in this folder of the repo. You should only need to open and/or run the following scripts: 
@@ -43,7 +48,7 @@ This guide covers the procedure for calibrating and deploying the Phaser trackin
     * [pose_recovery_input](pose_recovery_input): Houses example high-quality input for the laser pose recovery stage of calibration.
     * [mapping_input](mapping_input): Houses example high-quality input for the mapping stage of calibration.
 
-### Hardware
+#### Hardware
 1. Plug both Allied Vision cameras into your computer via its USB-B connector.  
 2. Plug the OptoTune mirror driver into your computer via its Dusb connector. 
 3. Supply power to the mirror driver. Make sure to never detach the Dusb connector from the Opotunt mirror driver (referred to as the base unit in the image below) when power is supplied. 
@@ -64,7 +69,7 @@ This guide covers the procedure for calibrating and deploying the Phaser trackin
 5. Besides the Phaser prototype itself, you’ll need a checkerboard with 5x8 29 mm squares for stereo-camera calibration. A PDF of this can be found in [stereo_calibration_input](stereo_calibration_input), and printed and pasted to a rigid board. Make sure to paste with minimal wrinkles or bends, as the planar geometry of the board is essential to proper stereo-camera calibration.
 
 
-## Calibration
+### Calibration
 
 Calibration consists of three stages that must be performed sequentially. 
 1. Stereo-camera calibration
@@ -72,8 +77,10 @@ Calibration consists of three stages that must be performed sequentially.
 3. Steering device mapping
 Each part takes as input a video of the checkerboard captured from the stereo-camera. Technically a continuous video can be taken and used for all stages, but in practice it is easier to capture one individual video for each stage. 
 
+Do not jostle or change component positions between the calibration and deployment stages. Slight shifts of components within the prototype necessitate re-calibration. 
 
-### Stereo-Camera Calibration
+
+#### Stereo-Camera Calibration
 
 Phaser’s stereo-cameras are calibrated with a traditional checkerboard procedure. 
 1. Switch filters to NONE.
@@ -86,7 +93,7 @@ Phaser’s stereo-cameras are calibrated with a traditional checkerboard procedu
 4. Run stereo-calibration by instantiating a [StereoCameraCalibrator](https://github.com/MobileX-CU/PowerDelivery/blob/main/system/v4/controller/stereo_calibration.py#L161) in [stereo_calibration.py]( stereo_calibration.py) with the first two arguments changed to the path of your images captured in step 3 above. The function will return the parameters of the stereo-pair. Save these as a pkl file.
 
 
-### Laser Pose Calibration
+#### Laser Pose Calibration
 
 Laser pose calibration requires a set of images showing the laser spot after scanning along its X and Y axes and striking the checkerboard at several different depths. Technically we only need a set of images at two depths. However, I find that it’s better to use at least four depths. 
 1. Keep the filters at **NONE**. 
@@ -107,7 +114,7 @@ Laser pose calibration requires a set of images showing the laser spot after sca
             <img width="50%" height="50%" src="imgs/angles.png">
     </p> 
    
-### Mapping
+#### Mapping
 
 The final stage of calibration determines the relationship between outgoing laser angles and steering commands to the mirror by fitting a function to spiral scan points. 
 1. Keep the filters at **NONE**. 
@@ -125,7 +132,7 @@ The final stage of calibration determines the relationship between outgoing lase
     </p> 
    
 
-## Deployment
+### Deployment
 
 With calibration done, the deployment is relatively simple, automated fully by [deploy.py](deploy.py). It’s important to not jostle or move between calibration and deployment. Slight shifts of components within the prototype could render the parameters outdated.
 1. Set the filters to **BLOCK**.
@@ -135,3 +142,6 @@ With calibration done, the deployment is relatively simple, automated fully by [
 5. Tune the deployment exposure and gain in [camera_settings.py](camera_settings.py) so that the background and scene are very dark. The retroreflector should appear as a bright blob against a largely black background background. To test out different exposure and gains, it is helpful to use [tracking_vis.py](tracking_vis.py)
 6. Turn on the laser with whatever power desired for your tests/operation setting. 
 7. Run [deploy.py](deploy.py) and tracking and steering will run automatically and continuously. 
+
+### Build Your Own Tracking and Steering System with Our Code
+Coming soon!
