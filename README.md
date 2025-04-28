@@ -1,5 +1,5 @@
 # Phaser 
-This repo contains all code for the paper Set Phasers to Stun: Beaming Power and Control to Mobile Robots with Laser Light (link coming soon!). We also provide a detailed guide for replicating the Phaser tracking and laser steering design, which enables integration of 3D object tracking via stereo-vision with any laser steering device. 
+This repo contains all code for the paper [Set Phasers to Stun: Beaming Power and Control to Mobile Robots with Laser Light](https://arxiv.org/abs/2504.17865). We also provide a detailed guide for replicating the Phaser tracking and laser steering design, which enables integration of 3D object tracking via stereo-vision with any laser steering device. 
 
 ## Contents
 Resources in this repo are organized into three folders:
